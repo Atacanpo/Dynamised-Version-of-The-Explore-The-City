@@ -32,7 +32,17 @@
                         <h2>Login</h2>
                     </div>
                     <div class="card-body">
-                        <form method="post" >
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                            {% if messages %}
+                                <ul class="flashes">
+                                    {% for category, message in messages %}
+                                        <li class="alert alert-{{ category }} text-center">{{ message }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        {% endwith %}
+
+                        <form method="post" action="{{ url_for('login') }}">
                             <div class="form-group">
                                 <input type="email" name="email" class="form-control" placeholder="Email" required="required"/>
                             </div>
@@ -60,7 +70,5 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-   
 </body>
 </html>
