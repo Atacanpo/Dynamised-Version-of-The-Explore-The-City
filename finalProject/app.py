@@ -132,25 +132,7 @@ def detail(hotel_id):
 
     return render_template('detail.html', hotel=hotel)
 
-# @app.route('/login', methods=["GET", "POST"])
-# def login():
-#     if request.method == "POST":
-#         email = request.form.get('email')
-#         password = request.form.get('password')
 
-#         result = db.session.execute(db.select(User).where(User.email == email))
-#         user = result.scalar()
-#         if not user:
-#             flash("That email does not exist, please try again.")
-#             return redirect(url_for('login'))
-#         elif not check_password_hash(user.password, password):
-#             flash('Password incorrect, please try again.')
-#             return redirect(url_for('login'))
-#         else:
-#             login_user(user)
-#             return redirect(url_for('index', name=user.name)) 
-
-#     return render_template("login.html", logged_in=current_user.is_authenticated)
 @app.route('/login', methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -160,14 +142,14 @@ def login():
         result = db.session.execute(db.select(User).where(User.email == email))
         user = result.scalar()
         if not user:
-            flash("That email does not exist, please try again.")
+            flash("That email does not exist, please try again.", 'error')
             return redirect(url_for('login'))
         elif not check_password_hash(user.password, password):
-            flash('Password incorrect, please try again.')
+            flash('Password incorrect, please try again.', 'error')
             return redirect(url_for('login'))
         else:
             login_user(user)
-            return redirect(url_for('index', name=user.name))  # Pass user's name here
+            return redirect(url_for('index', name=user.name))
 
     return render_template("login.html", logged_in=current_user.is_authenticated)
 
@@ -224,65 +206,7 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
-# @app.route('/login', methods=['GET', 'POST'])
-# def login():
-#     error = None  
 
-#     if request.method == 'POST':
-#         email = request.form['email']
-#         password = request.form['password']
-
-#         db = connect_db()
-#         query = '''
-#             SELECT * FROM users
-#             WHERE email = ?
-#         '''
-#         cursor = db.execute(query, (email,))
-#         user = cursor.fetchone()
-#         db.close()
-
-#         if user and check_password_hash(user[4], password):
-#             session['user_id'] = user[0]
-#             session['user_name'] = user[1]  
-#             return redirect(url_for('index'))
-#         else:
-#             error = 'Invalid email or password. Please try again.'
-
-#     return render_template('login.html', error=error)
-
-
-# @app.route('/signup', methods=['GET', 'POST'])
-# def signup():
-#     if request.method == 'POST':
-#         name = request.form['Name']
-#         surname = request.form['surName']
-#         email = request.form['email']
-#         password = request.form['password']
-#         hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
-
-#         db = connect_db()
-
-#         db.execute('''
-#            CREATE TABLE IF NOT EXISTS users (
-#               id INTEGER PRIMARY KEY AUTOINCREMENT,
-#               name TEXT NOT NULL,
-#               surname TEXT NOT NULL,
-#               email TEXT NOT NULL,
-#               password TEXT NOT NULL
-#            );
-#         ''')
-
-#         query = '''
-#             INSERT INTO users (name, surname, email, password)
-#             VALUES (?, ?, ?, ?)
-#         '''
-#         db.execute(query, (name, surname, email, hashed_password))
-#         db.commit()
-#         db.close()
-
-#         return redirect(url_for('login'))
-
-#     return render_template('signup.html')
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
