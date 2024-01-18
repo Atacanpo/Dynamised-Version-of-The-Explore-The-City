@@ -132,25 +132,7 @@ def detail(hotel_id):
 
     return render_template('detail.html', hotel=hotel)
 
-# @app.route('/login', methods=["GET", "POST"])
-# def login():
-#     if request.method == "POST":
-#         email = request.form.get('email')
-#         password = request.form.get('password')
 
-#         result = db.session.execute(db.select(User).where(User.email == email))
-#         user = result.scalar()
-#         if not user:
-#             flash("That email does not exist, please try again.")
-#             return redirect(url_for('login'))
-#         elif not check_password_hash(user.password, password):
-#             flash('Password incorrect, please try again.')
-#             return redirect(url_for('login'))
-#         else:
-#             login_user(user)
-#             return redirect(url_for('index', name=user.name)) 
-
-#     return render_template("login.html", logged_in=current_user.is_authenticated)
 @app.route('/login', methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -160,14 +142,14 @@ def login():
         result = db.session.execute(db.select(User).where(User.email == email))
         user = result.scalar()
         if not user:
-            flash("That email does not exist, please try again.")
+            flash("That email does not exist, please try again.", 'error')
             return redirect(url_for('login'))
         elif not check_password_hash(user.password, password):
-            flash('Password incorrect, please try again.')
+            flash('Password incorrect, please try again.', 'error')
             return redirect(url_for('login'))
         else:
             login_user(user)
-            return redirect(url_for('index', name=user.name))  # Pass user's name here
+            return redirect(url_for('index', name=user.name))
 
     return render_template("login.html", logged_in=current_user.is_authenticated)
 
